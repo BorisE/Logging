@@ -402,20 +402,29 @@ namespace LoggingLib
         /// </summary>
         public static void DisplayLogInTextBox(RichTextBox LogTextBox, LogLevel LogLevel = LogLevel.Activity)
         {
+            ////Execution timers
+            //List<TimeSpan> ExecutionTimeStamp = new List<TimeSpan>();
+            //Stopwatch stopWatch = Stopwatch.StartNew();
+            //stopWatch.Start();
+
             List<LogRecord> LogListNew = new List<LogRecord>();
+
+            //ExecutionTimeStamp.Add(stopWatch.Elapsed);//todo: remove
 
             //Copy LOGLIST
             List<LogRecord> LOGLIST_COPY;
             lock (logLock)
-            { 
+            {
                 LOGLIST_COPY = new List<LogRecord>(LOGLIST);
             }
+
+            //ExecutionTimeStamp.Add(stopWatch.Elapsed);//todo: remove
 
             //sort new (not saved) records
             for (var i = 0; i < LOGLIST_COPY.Count; i++)
             {
                 // if current line wasn't displayed
-                if (LOGLIST_COPY[i] !=null && !LOGLIST_COPY[i].displayed) //Always check for null due to multithreading!!!
+                if (LOGLIST_COPY[i] != null && !LOGLIST_COPY[i].displayed) //Always check for null due to multithreading!!!
                 {
                     LogListNew.Add(LOGLIST_COPY[i]); //add to newrecords array
                     lock (logLock)
@@ -425,6 +434,8 @@ namespace LoggingLib
                 }
             }
 
+            //ExecutionTimeStamp.Add(stopWatch.Elapsed);//todo: remove
+
             //check - if logtextbox is too large
             if (LogTextBox.Lines.Length > _MAX_DIPSLAYED_PROG_LOG_LINES)
             {
@@ -432,6 +443,8 @@ namespace LoggingLib
                 var newLines = lines.Skip(LogTextBox.Lines.Length - _MAX_DIPSLAYED_PROG_LOG_LINES);
                 LogTextBox.Lines = newLines.ToArray();
             }
+
+            //ExecutionTimeStamp.Add(stopWatch.Elapsed);//todo: remove
 
             string RetStr = "";
             //Save new (not saved) records
@@ -460,14 +473,27 @@ namespace LoggingLib
                         LogTextBox.AppendText(RetStr);
 
                         LogTextBox.SelectionColor = LogTextBox.ForeColor;
-
-                        //set cursor to the end
-                        LogTextBox.SelectionStart = LogTextBox.TextLength;
-                        LogTextBox.SelectionLength = 0;
-                        LogTextBox.ScrollToCaret();
                     }
                 }
+
+                //set cursor to the end
+                LogTextBox.SelectionStart = LogTextBox.TextLength;
+                LogTextBox.SelectionLength = 0;
+                LogTextBox.ScrollToCaret();
             }
+
+            //stopWatch.Stop();//todo: remove
+            //TimeSpan ts_all = stopWatch.Elapsed;
+            //ExecutionTimeStamp.Add(ts_all);//todo: remove
+            //if (ts_all.TotalSeconds > 1)
+            //{
+            //    string St = "";
+            //    foreach (TimeSpan ts in ExecutionTimeStamp)
+            //    {
+            //        St += ts.TotalSeconds + "|";
+            //    }
+            //    MessageBox.Show(St);
+            //}
         }
 
         public static string LogExceptionMessage(Exception Ex, string MESSAGEST, bool ImportantLogFlag = true)
