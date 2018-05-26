@@ -450,6 +450,7 @@ namespace LoggingLib
             //Save new (not saved) records
             if (LogListNew.Count > 0)
             {
+                bool bOutputWasMade = false;
                 for (var i = 0; i < LogListNew.Count; i++)
                 {
                     // if current log level is less then DebugLevel
@@ -471,15 +472,19 @@ namespace LoggingLib
                         RetStr += String.Format(": {0}", LogListNew[i].Message) + Environment.NewLine;
 
                         LogTextBox.AppendText(RetStr);
+                        bOutputWasMade = true;
 
                         LogTextBox.SelectionColor = LogTextBox.ForeColor;
                     }
                 }
 
                 //set cursor to the end
-                LogTextBox.SelectionStart = LogTextBox.TextLength;
-                LogTextBox.SelectionLength = 0;
-                LogTextBox.ScrollToCaret();
+                if (bOutputWasMade)
+                { 
+                    LogTextBox.SelectionStart = LogTextBox.TextLength;
+                    LogTextBox.SelectionLength = 0;
+                    LogTextBox.ScrollToCaret();
+                }
             }
 
             //stopWatch.Stop();//todo: remove

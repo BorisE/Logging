@@ -3,6 +3,9 @@
 http://astromania.info
 
 
+1.0.4 [27.05.2018]
+- [logging] dispalyIntoTextBox bug bug :)
+
 1.0.3 [17.05.2018]
 - [logging] dispalyIntoTextBox bug
 
